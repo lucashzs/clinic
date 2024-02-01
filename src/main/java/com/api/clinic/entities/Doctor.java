@@ -21,9 +21,12 @@ import java.util.List;
 @Entity
 public class Doctor implements UserDetails {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @NotNull
     @Column(name = "cpf")
-    @Id
     private String document;
 
     @NotBlank
@@ -49,21 +52,17 @@ public class Doctor implements UserDetails {
     @NotNull
     private String telephone;
 
-    @Enumerated(EnumType.STRING)
-    private DoctorRole role;
-
     public Doctor(String email, String password, String document) {
         this.email = email;
         this.password = password;
         this.document = document;
     }
-    public Doctor(String email, String encryptPassword, DoctorRole role) {
+    public Doctor(String email, String encryptPassword) {
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.role == DoctorRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return null;
     }
 
     @Override

@@ -39,7 +39,7 @@ public class AuthenticationService {
         if (this.doctorRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
 
         String encryptPassword = new BCryptPasswordEncoder().encode(data.password());
-        Doctor newDoc = new Doctor(data.email(), encryptPassword, data.role());
+        Doctor newDoc = new Doctor(data.email(), encryptPassword);
 
         this.doctorRepository.save(newDoc);
         return ResponseEntity.ok().build();

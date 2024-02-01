@@ -30,7 +30,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/v1/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/signup").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/logged").hasRole("ADMIN")
                         .anyRequest().authenticated()
 
                 )
