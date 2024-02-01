@@ -1,5 +1,6 @@
 package com.api.clinic.entities;
 
+import com.api.clinic.dtos.RegisterDoctorDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,12 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,12 +20,10 @@ import java.util.List;
 @Entity
 public class Doctor implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @NotNull
     @Column(name = "cpf")
+    @Id
     private String document;
 
     @NotBlank
@@ -37,10 +34,6 @@ public class Doctor implements UserDetails {
     @NotNull
     @Size(min = 8)
     private String password;
-
-    @NotBlank
-    @NotNull
-    private String confirmPassword;
 
     @NotBlank
     @NotNull
@@ -57,7 +50,14 @@ public class Doctor implements UserDetails {
         this.password = password;
         this.document = document;
     }
-    public Doctor(String email, String encryptPassword) {
+
+    public Doctor(RegisterDoctorDto data, String encryptPassword) {
+        this.document = data.document();
+        this.email = data.email();
+        this.password = encryptPassword;
+        this.specialty = data.specialty();
+        this.birthDate = data.birthDate();
+        this.telephone = data.telephone();
     }
 
     @Override

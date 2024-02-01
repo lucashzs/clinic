@@ -35,7 +35,6 @@ public class DoctorService {
     public Doctor update (Doctor doc){
         Doctor newDoc = findByDocument(doc.getDocument());
         newDoc.setPassword(doc.getPassword());
-        newDoc.setConfirmPassword(doc.getConfirmPassword());
         this.doctorRepository.save(newDoc);
         return newDoc;
     }
