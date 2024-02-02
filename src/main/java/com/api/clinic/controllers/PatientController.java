@@ -25,7 +25,7 @@ public class PatientController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody Patient user){
+    public ResponseEntity<Object> create(@RequestBody Patient user){
         this.patientService.create(user);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{document}").buildAndExpand(user.getDocument()).toUri();
@@ -33,14 +33,14 @@ public class PatientController {
     }
 
     @PutMapping("/{document}")
-    public ResponseEntity<Void> update (@RequestBody Patient pat, @PathVariable String document){
+    public ResponseEntity<Object> update (@RequestBody Patient pat, @PathVariable String document){
         pat.setDocument(document);
         this.patientService.update(pat);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete (@PathVariable String document){
+    public ResponseEntity<Object> delete (@PathVariable String document){
         this.patientService.delete(document);
         return ResponseEntity.noContent().build();
     }
