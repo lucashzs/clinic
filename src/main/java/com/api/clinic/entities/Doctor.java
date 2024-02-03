@@ -1,14 +1,15 @@
 package com.api.clinic.entities;
 
-import com.api.clinic.dtos.DoctorDto;
 import com.api.clinic.dtos.RegisterDoctorDto;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,10 +26,12 @@ public class Doctor implements UserDetails {
     @NotNull
     @Column(name = "cpf")
     @Id
+    @CPF
     private String document;
 
     @NotBlank
     @NotNull
+    @Email
     private String email;
 
     @NotBlank
