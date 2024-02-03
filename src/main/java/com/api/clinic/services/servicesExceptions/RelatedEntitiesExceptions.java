@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class RelatedEntitiesExceptions extends DataIntegrityViolationException {
 
-    public RelatedEntitiesExceptions (String message){
+    public RelatedEntitiesExceptions(String message) {
         super(message);
     }
 }

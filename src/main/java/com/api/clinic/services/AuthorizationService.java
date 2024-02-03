@@ -11,7 +11,7 @@ public class AuthorizationService implements UserDetailsService {
 
     private DoctorRepository doctorRepository;
 
-    public AuthorizationService (DoctorRepository doctorRepository){
+    public AuthorizationService(DoctorRepository doctorRepository) {
         this.doctorRepository = doctorRepository;
     }
 

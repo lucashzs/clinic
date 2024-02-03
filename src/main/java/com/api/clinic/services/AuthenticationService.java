@@ -24,11 +24,11 @@ public class AuthenticationService {
     }
 
     @Transactional
-    public ResponseEntity<Object> login(LoginDoctorDto data) {
+    public ResponseEntity<Object> login(LoginDoctorDto loginData) {
 
-        var doctor = this.doctorRepository.findByEmail(data.email());
+        var doctor = this.doctorRepository.findByEmail(loginData.email());
 
-        if (doctor == null || !new BCryptPasswordEncoder().matches(data.password(), doctor.getPassword())) {
+        if (doctor == null || !new BCryptPasswordEncoder().matches(loginData.password(), doctor.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
         var token = tokenService.generationToken(doctor);
@@ -38,16 +38,17 @@ public class AuthenticationService {
 
     @Transactional
     @Modifying
-    public ResponseEntity<Object> register(RegisterDoctorDto data) {
-        Doctor newDoc;
-        if (data.password().equals(data.confirmPassword())) {
-            if (this.doctorRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
-            newDoc = new Doctor(data, EncryptPasswordService.encryptPassword(data.password()));
+    public ResponseEntity<Object> register(RegisterDoctorDto registerData) {
+        Doctor newDoctor;
+        if (registerData.password().equals(registerData.confirmPassword())) {
+            if (this.doctorRepository.findByEmail(registerData.email()) != null)
+                return ResponseEntity.badRequest().build();
+            newDoctor = new Doctor(registerData, EncryptPasswordService.encryptPassword(registerData.password()));
         } else {
             return ResponseEntity.badRequest().body("The passwords are not the same");
         }
 
-        this.doctorRepository.save(newDoc);
+        this.doctorRepository.save(newDoctor);
         return ResponseEntity.ok().build();
 
     }

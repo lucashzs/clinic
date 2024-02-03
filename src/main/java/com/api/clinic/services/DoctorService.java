@@ -5,7 +5,6 @@ import com.api.clinic.entities.Doctor;
 import com.api.clinic.repositorys.DoctorRepository;
 import com.api.clinic.services.servicesExceptions.NotFoundException;
 import com.api.clinic.services.servicesExceptions.RelatedEntitiesExceptions;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,9 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.print.Doc;
 import java.util.Optional;
 
 @Service
@@ -42,17 +39,18 @@ public class DoctorService {
         return doc;
     }
 
-    public Doctor searchUser(@PathVariable String document){
+    public Doctor searchUser(@PathVariable String document) {
         Authentication authenticated = SecurityContextHolder.getContext().getAuthentication();
-        if (!doctorRepository.existsByDocument(document) || authenticated instanceof AnonymousAuthenticationToken){
+        if (!doctorRepository.existsByDocument(document) || authenticated instanceof AnonymousAuthenticationToken) {
             throw new RelatedEntitiesExceptions("You can not update in other user");
-        } return doctor;
+        }
+        return doctor;
     }
 
-    public void canDeleteDoctor(String document){
+    public void canDeleteDoctor(String document) {
         Authentication authenticated = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails;
-        if(authenticated instanceof AnonymousAuthenticationToken){
+        if (authenticated instanceof AnonymousAuthenticationToken) {
             throw new AccessDeniedException("You are not authorized to delete a doctor");
         } else {
             userDetails = (UserDetails) authenticated.getPrincipal();
@@ -63,7 +61,7 @@ public class DoctorService {
     }
 
     @Transactional
-    public void update(DoctorDto doctorDto,String document) {
+    public void update(DoctorDto doctorDto, String document) {
         searchUser(document);
         Doctor newDoctor = findByDocument(document);
         newDoctor.setPassword(EncryptPasswordService.encryptPassword(doctorDto.password()));

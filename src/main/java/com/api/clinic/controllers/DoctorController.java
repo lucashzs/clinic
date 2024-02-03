@@ -33,8 +33,8 @@ public class DoctorController {
     }
 
     @PutMapping("/{document}")
-    public ResponseEntity<Object> update(@RequestBody DoctorDto doctorDto, @PathVariable String document) {
-        this.doctorService.update(doctorDto, document);
+    public ResponseEntity<Object> update(@RequestBody DoctorDto doctorDetails, @PathVariable String document) {
+        this.doctorService.update(doctorDetails, document);
         return ResponseEntity.noContent().build();
     }
 

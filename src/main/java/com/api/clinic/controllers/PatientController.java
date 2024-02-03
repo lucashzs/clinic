@@ -33,9 +33,9 @@ public class PatientController {
     }
 
     @PutMapping("/{document}")
-    public ResponseEntity<Object> update (@RequestBody Patient pat, @PathVariable String document){
-        pat.setDocument(document);
-        this.patientService.update(pat);
+    public ResponseEntity<Object> update (@RequestBody Patient patient, @PathVariable String document){
+        patient.setDocument(document);
+        this.patientService.update(patient);
         return ResponseEntity.noContent().build();
     }
 
