@@ -39,8 +39,13 @@ public class AuthenticationService {
     @Transactional
     @Modifying
     public ResponseEntity<Object> register(RegisterDoctorDto data) {
-        if (this.doctorRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
-        var newDoc = new Doctor(data, EncryptPasswordService.encryptPassword(data.password()));
+        Doctor newDoc;
+        if (data.password().equals(data.confirmPassword())) {
+            if (this.doctorRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
+            newDoc = new Doctor(data, EncryptPasswordService.encryptPassword(data.password()));
+        } else {
+            return ResponseEntity.badRequest().body("The passwords are not the same");
+        }
 
         this.doctorRepository.save(newDoc);
         return ResponseEntity.ok().build();
