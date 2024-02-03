@@ -40,9 +40,7 @@ public class AuthenticationService {
     @Modifying
     public ResponseEntity<Object> register(RegisterDoctorDto data) {
         if (this.doctorRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
-
-        String encryptPassword = new BCryptPasswordEncoder().encode(data.password());
-        var newDoc = new Doctor(data, encryptPassword);
+        var newDoc = new Doctor(data, EncryptPasswordService.encryptPassword(data.password()));
 
         this.doctorRepository.save(newDoc);
         return ResponseEntity.ok().build();

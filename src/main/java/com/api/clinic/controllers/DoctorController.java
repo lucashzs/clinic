@@ -1,5 +1,6 @@
 package com.api.clinic.controllers;
 
+import com.api.clinic.dtos.DoctorDto;
 import com.api.clinic.entities.Doctor;
 import com.api.clinic.services.DoctorService;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class DoctorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody Doctor user) {
+    public ResponseEntity<Object> create(@RequestBody Doctor user) {
         this.doctorService.create(user);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{document}").buildAndExpand(user.getDocument()).toUri();
@@ -32,14 +33,13 @@ public class DoctorController {
     }
 
     @PutMapping("/{document}")
-    public ResponseEntity<Void> update(@RequestBody Doctor doc, @PathVariable String document) {
-        doc.setDocument(document);
-        this.doctorService.update(doc);
+    public ResponseEntity<Object> update(@RequestBody DoctorDto doctorDto, @PathVariable String document) {
+        this.doctorService.update(doctorDto, document);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String document) {
+    @DeleteMapping("/{document}")
+    public ResponseEntity<Object> deleteByDocument(@PathVariable String document) {
         this.doctorService.delete(document);
         return ResponseEntity.noContent().build();
     }

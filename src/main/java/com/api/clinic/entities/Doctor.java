@@ -1,5 +1,6 @@
 package com.api.clinic.entities;
 
+import com.api.clinic.dtos.DoctorDto;
 import com.api.clinic.dtos.RegisterDoctorDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -60,6 +61,7 @@ public class Doctor implements UserDetails {
         this.telephone = data.telephone();
     }
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -67,7 +69,7 @@ public class Doctor implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return document;
     }
 
     @Override
