@@ -35,7 +35,6 @@ public class SecurityConfig {
                 .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer
                         .logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/logoff", "POST"))
                         .logoutSuccessUrl("/api/v1/login").permitAll());
-
         return httpSecurity.build();
     }
 
