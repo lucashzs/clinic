@@ -43,7 +43,6 @@ public class DoctorService {
 
     public ResponseEntity<Object> delete(String document) {
         canDeleteDoctor(document);
-
         try {
             this.doctorRepository.deleteById(document);
         } catch (Exception e) {
