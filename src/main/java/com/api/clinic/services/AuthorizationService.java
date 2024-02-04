@@ -18,6 +18,6 @@ public class AuthorizationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return doctorRepository.findByEmail(email).orElseThrow(() -> new RelatedEntitiesExceptions("Email Not Found"));
+        return doctorRepository.findByEmail(email).orElseThrow(() -> new RelatedEntitiesExceptions("Email Not Found!"));
     }
 }

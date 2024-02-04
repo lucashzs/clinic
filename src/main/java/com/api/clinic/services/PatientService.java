@@ -4,14 +4,12 @@ import com.api.clinic.dtos.PatientCreateDto;
 import com.api.clinic.dtos.PatientDto;
 import com.api.clinic.entities.Patient;
 import com.api.clinic.repositories.PatientRepository;
-import com.api.clinic.services.servicesExceptions.NotFoundException;
 import com.api.clinic.services.servicesExceptions.RelatedEntitiesExceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 @Service
 public class PatientService {
@@ -23,10 +21,7 @@ public class PatientService {
     }
 
     public Patient findByDocument(String document) {
-        Optional<Patient> patient = patientRepository.findById(document);
-        return patient.orElseThrow(() -> new NotFoundException(
-                "Document Not Found! ID: " + document
-        ));
+        return this.patientRepository.findById(document).orElseThrow(() -> new RelatedEntitiesExceptions("Document Not Found! ID: " + document));
     }
 
     @Transactional
@@ -42,7 +37,7 @@ public class PatientService {
         patient.setName(patientDto.name());
         patient.setDateTime(patientDto.dateTime());
         this.patientRepository.save(patient);
-        return ResponseEntity.status(HttpStatus.OK).body(String.format("Update Successfully %s", patientDto));
+        return ResponseEntity.status(HttpStatus.OK).body("Update Successfully!");
     }
 
     public ResponseEntity<Object> delete(String document) {

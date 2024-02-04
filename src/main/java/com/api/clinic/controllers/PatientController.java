@@ -18,9 +18,9 @@ public class PatientController {
     }
 
     @GetMapping("/{document}")
-    public ResponseEntity<Patient> findByDocument (@PathVariable String document){
+    public ResponseEntity<PatientDto> findByDocument (@PathVariable String document){
         Patient patient = this.patientService.findByDocument(document);
-        return  ResponseEntity.ok().body(patient);
+        return  ResponseEntity.ok().body(new PatientDto(patient));
     }
 
     @PostMapping

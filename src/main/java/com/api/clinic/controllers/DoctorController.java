@@ -17,9 +17,9 @@ public class DoctorController {
     }
 
     @GetMapping("/{document}")
-    public ResponseEntity<Doctor> findByDocument(@PathVariable String document) {
-        Doctor doc = this.doctorService.findByDocument(document);
-        return ResponseEntity.ok().body(doc);
+    public ResponseEntity<DoctorDto> findByDocument(@PathVariable String document) {
+        Doctor doctor = this.doctorService.findByDocument(document);
+        return ResponseEntity.ok().body(new DoctorDto(doctor));
     }
 
     @PutMapping("/{document}")

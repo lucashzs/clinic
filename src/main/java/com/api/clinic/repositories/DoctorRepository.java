@@ -9,6 +9,4 @@ import java.util.Optional;
 @Repository
 public interface DoctorRepository extends JpaRepository<Doctor, String> {
     Optional<Doctor> findByEmail(String email);
-
-    boolean existsByDocument(String document);
 }
