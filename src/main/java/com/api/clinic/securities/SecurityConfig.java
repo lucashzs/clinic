@@ -1,4 +1,4 @@
-package com.api.clinic.securitys;
+package com.api.clinic.securities;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

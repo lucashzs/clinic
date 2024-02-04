@@ -1,5 +1,7 @@
 package com.api.clinic.entities;
 
+import com.api.clinic.dtos.PatientCreateDto;
+import com.api.clinic.dtos.PatientDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
@@ -25,4 +27,16 @@ public class Patient {
 
     @NotNull
     private LocalDateTime dateTime;
+
+    public Patient (PatientDto patientDto){
+        this.name = patientDto.name();
+        this.dateTime = patientDto.dateTime();
+    }
+
+    public Patient (PatientCreateDto patientCreateDto){
+        this.document = patientCreateDto.document();
+        this.name = patientCreateDto.name();
+        this.dateTime = patientCreateDto.dateTime();
+    }
+
 }

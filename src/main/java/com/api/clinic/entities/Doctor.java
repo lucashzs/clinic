@@ -9,7 +9,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -26,12 +25,10 @@ public class Doctor implements UserDetails {
     @NotNull
     @Column(name = "cpf")
     @Id
-    @CPF
     private String document;
 
     @NotBlank
     @NotNull
-    @Email
     private String email;
 
     @NotBlank
@@ -48,12 +45,6 @@ public class Doctor implements UserDetails {
 
     @NotNull
     private String telephone;
-
-    public Doctor(String email, String password, String document) {
-        this.email = email;
-        this.password = password;
-        this.document = document;
-    }
 
     public Doctor(RegisterDoctorDto data, String encryptPassword) {
         this.document = data.document();

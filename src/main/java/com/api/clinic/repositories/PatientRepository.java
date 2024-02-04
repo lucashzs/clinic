@@ -1,4 +1,4 @@
-package com.api.clinic.repositorys;
+package com.api.clinic.repositories;
 
 import com.api.clinic.entities.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;

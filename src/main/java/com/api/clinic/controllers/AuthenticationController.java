@@ -2,9 +2,7 @@ package com.api.clinic.controllers;
 
 import com.api.clinic.dtos.LoginDoctorDto;
 import com.api.clinic.dtos.RegisterDoctorDto;
-import com.api.clinic.repositorys.DoctorRepository;
 import com.api.clinic.services.AuthenticationService;
-import com.api.clinic.services.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,13 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class AuthenticationController {
 
-    private final DoctorRepository doctorRepository;
-    private final TokenService tokenService;
     private final AuthenticationService authenticationService;
 
-    public AuthenticationController(DoctorRepository doctorRepository, TokenService tokenService, AuthenticationService authenticationService) {
-        this.doctorRepository = doctorRepository;
-        this.tokenService = tokenService;
+    public AuthenticationController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
 

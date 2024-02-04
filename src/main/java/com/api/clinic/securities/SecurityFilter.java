@@ -1,7 +1,8 @@
-package com.api.clinic.securitys;
+package com.api.clinic.securities;
 
-import com.api.clinic.repositorys.DoctorRepository;
+import com.api.clinic.repositories.DoctorRepository;
 import com.api.clinic.services.TokenService;
+import com.api.clinic.services.servicesExceptions.RelatedEntitiesExceptions;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +31,8 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         if (token != null) {
             var email = tokenService.validationToken(token);
-            UserDetails doctor = doctorRepository.findByEmail(email);
+            UserDetails doctor;
+            doctor = doctorRepository.findByEmail(email).orElseThrow(() -> new RelatedEntitiesExceptions("Email Not Found"));
 
             var authentication = new UsernamePasswordAuthenticationToken(doctor, null, doctor.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);

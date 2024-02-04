@@ -2,9 +2,11 @@ package com.api.clinic.services;
 
 import com.api.clinic.dtos.DoctorDto;
 import com.api.clinic.entities.Doctor;
-import com.api.clinic.repositorys.DoctorRepository;
+import com.api.clinic.repositories.DoctorRepository;
 import com.api.clinic.services.servicesExceptions.NotFoundException;
 import com.api.clinic.services.servicesExceptions.RelatedEntitiesExceptions;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,12 +35,6 @@ public class DoctorService {
         ));
     }
 
-    @Transactional
-    public Doctor create(Doctor doc) {
-        doc = this.doctorRepository.save(doc);
-        return doc;
-    }
-
     public Doctor searchUser(@PathVariable String document) {
         Authentication authenticated = SecurityContextHolder.getContext().getAuthentication();
         if (!doctorRepository.existsByDocument(document) || authenticated instanceof AnonymousAuthenticationToken) {
@@ -61,7 +57,7 @@ public class DoctorService {
     }
 
     @Transactional
-    public void update(DoctorDto doctorDto, String document) {
+    public ResponseEntity<Object> update(DoctorDto doctorDto, String document) {
         searchUser(document);
         Doctor newDoctor = findByDocument(document);
         newDoctor.setPassword(EncryptPasswordService.encryptPassword(doctorDto.password()));
@@ -70,14 +66,16 @@ public class DoctorService {
         newDoctor.setSpecialty(doctorDto.specialty());
         newDoctor.setBirthDate(doctorDto.birthDate());
         this.doctorRepository.save(newDoctor);
+        return ResponseEntity.status(HttpStatus.OK).body(String.format("Update Successfully %s", doctorDto));
     }
 
-    public void delete(String document) {
+    public ResponseEntity<Object> delete(String document) {
         canDeleteDoctor(document);
         try {
             this.doctorRepository.deleteById(document);
         } catch (Exception e) {
             throw new RelatedEntitiesExceptions("Cannot delete as we cannot find this document!");
         }
+        return ResponseEntity.status(HttpStatus.OK).body(String.format("Delete Successfully %s", document));
     }
 }

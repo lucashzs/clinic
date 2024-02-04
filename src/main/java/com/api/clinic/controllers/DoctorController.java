@@ -5,12 +5,10 @@ import com.api.clinic.entities.Doctor;
 import com.api.clinic.services.DoctorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 
 @RestController
-@RequestMapping("/logged")
+@RequestMapping("/doctor")
 public class DoctorController {
     private final DoctorService doctorService;
 
@@ -24,23 +22,13 @@ public class DoctorController {
         return ResponseEntity.ok().body(doc);
     }
 
-    @PostMapping
-    public ResponseEntity<Object> create(@RequestBody Doctor user) {
-        this.doctorService.create(user);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{document}").buildAndExpand(user.getDocument()).toUri();
-        return ResponseEntity.created(uri).build();
-    }
-
     @PutMapping("/{document}")
     public ResponseEntity<Object> update(@RequestBody DoctorDto doctorDetails, @PathVariable String document) {
-        this.doctorService.update(doctorDetails, document);
-        return ResponseEntity.noContent().build();
+        return doctorService.update(doctorDetails, document);
     }
 
     @DeleteMapping("/{document}")
     public ResponseEntity<Object> deleteByDocument(@PathVariable String document) {
-        this.doctorService.delete(document);
-        return ResponseEntity.noContent().build();
+        return doctorService.delete(document);
     }
 }
