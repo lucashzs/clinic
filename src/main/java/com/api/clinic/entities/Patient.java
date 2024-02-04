@@ -26,11 +26,11 @@ public class Patient {
     private String document;
 
     @NotNull
-    private LocalDateTime dateTime;
+    private String dateTime;
 
     public Patient (PatientDto patientDto){
         this.name = patientDto.name();
-        this.dateTime = patientDto.dateTime();
+        this.dateTime = String.valueOf(patientDto.dateTime());
     }
 
     public Patient (PatientCreateDto patientCreateDto){

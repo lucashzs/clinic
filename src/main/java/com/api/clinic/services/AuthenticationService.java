@@ -13,6 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 @Service
 public class AuthenticationService {
 
@@ -22,6 +26,15 @@ public class AuthenticationService {
     public AuthenticationService(DoctorRepository doctorRepository, TokenService tokenService) {
         this.doctorRepository = doctorRepository;
         this.tokenService = tokenService;
+    }
+    private boolean verifyDate(String date) {
+        DateTimeFormatter formatter =  DateTimeFormatter.ISO_LOCAL_DATE;
+        try {
+            LocalDate.parse(date, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 
     @Transactional
@@ -43,9 +56,14 @@ public class AuthenticationService {
     public ResponseEntity<Object> register(RegisterDoctorDto registerData) {
         Doctor newDoctor;
         if (registerData.password().equals(registerData.confirmPassword())) {
-            if (!registerData.email().contains("@")) {
+            var parts = registerData.email().split("@");
+            if (parts.length != 2 || parts[0].isEmpty() || parts[1].isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email address sent in an invalid format!");
             }
+            if(!verifyDate(String.valueOf(registerData.birthDate()))) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid birthDate, put it in the format: yyyy-mm-dd");
+            }
+            LocalDate date = LocalDate.parse(registerData.birthDate(), DateTimeFormatter.ISO_LOCAL_DATE);
             if (this.doctorRepository.findByEmail(registerData.email()).isPresent())
                 return ResponseEntity.badRequest().build();
             newDoctor = new Doctor(registerData, EncryptPasswordService.encryptPassword(registerData.password()));

@@ -10,6 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 
 @Service
 public class PatientService {
@@ -24,8 +28,28 @@ public class PatientService {
         return this.patientRepository.findById(document).orElseThrow(() -> new RelatedEntitiesExceptions("Document Not Found! ID: " + document));
     }
 
+    private boolean verifyDateTime(String dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+        try {
+            LocalDateTime.parse(dateTime, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
     @Transactional
     public ResponseEntity<Object> create(PatientCreateDto patientCreateDto) {
+        if (patientCreateDto.name() == null || patientCreateDto.name().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid name!");
+        }
+        if (!verifyDateTime(patientCreateDto.dateTime())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid dateTime, put it in the format: 'yyyy-mm-ddThh:mm:ss'");
+        }
+        LocalDateTime dateTime = LocalDateTime.parse(patientCreateDto.dateTime());
+        if (this.patientRepository.existsByDocument(patientCreateDto.document())) {
+            throw new RelatedEntitiesExceptions("Document already exists!");
+        }
         Patient patient = new Patient(patientCreateDto);
         this.patientRepository.save(patient);
         return ResponseEntity.status(HttpStatus.CREATED).body("Patient created successfully!");
@@ -33,9 +57,12 @@ public class PatientService {
 
     @Transactional
     public ResponseEntity<Object> update(PatientDto patientDto, String document) {
+        if (!verifyDateTime(patientDto.dateTime())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid dateTime, put it in the format: 'yyyy-mm-ddThh:mm:ss'");
+        }
         Patient patient = findByDocument(document);
         patient.setName(patientDto.name());
-        patient.setDateTime(patientDto.dateTime());
+        patient.setDateTime(String.valueOf(patientDto.dateTime()));
         this.patientRepository.save(patient);
         return ResponseEntity.status(HttpStatus.OK).body("Update Successfully!");
     }
@@ -49,4 +76,5 @@ public class PatientService {
         }
         return ResponseEntity.status(HttpStatus.OK).body(String.format("Delete Successfully %s", document));
     }
+
 }

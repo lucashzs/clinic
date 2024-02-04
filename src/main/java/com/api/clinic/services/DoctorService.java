@@ -36,7 +36,7 @@ public class DoctorService {
         newDoctor.setTelephone(doctorDto.telephone());
         newDoctor.setEmail(doctorDto.email());
         newDoctor.setSpecialty(doctorDto.specialty());
-        newDoctor.setBirthDate(doctorDto.birthDate());
+        newDoctor.setBirthDate(String.valueOf(doctorDto.birthDate()));
         this.doctorRepository.save(newDoctor);
         return ResponseEntity.status(HttpStatus.OK).body("Update Successfully");
     }

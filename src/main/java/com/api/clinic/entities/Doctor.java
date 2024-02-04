@@ -40,7 +40,7 @@ public class Doctor implements UserDetails {
     private String specialty;
 
     @NotNull
-    private LocalDate birthDate;
+    private String birthDate;
 
     @NotNull
     private String telephone;

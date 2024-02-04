@@ -1,6 +1,5 @@
 package com.api.clinic.dtos;
 
-import java.time.LocalDateTime;
 
-public record PatientCreateDto(String name, LocalDateTime dateTime, String document){
+public record PatientCreateDto(String name, String dateTime, String document){
 }

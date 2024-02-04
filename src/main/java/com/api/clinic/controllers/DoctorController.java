@@ -1,6 +1,7 @@
 package com.api.clinic.controllers;
 
 import com.api.clinic.dtos.DoctorDto;
+import com.api.clinic.dtos.ResponseGetDto;
 import com.api.clinic.entities.Doctor;
 import com.api.clinic.services.DoctorService;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,9 @@ public class DoctorController {
     }
 
     @GetMapping("/{document}")
-    public ResponseEntity<DoctorDto> findByDocument(@PathVariable String document) {
+    public ResponseEntity<ResponseGetDto> findByDocument(@PathVariable String document) {
         Doctor doctor = this.doctorService.findByDocument(document);
-        return ResponseEntity.ok().body(new DoctorDto(doctor));
+        return ResponseEntity.ok().body(new ResponseGetDto(doctor));
     }
 
     @PutMapping("/{document}")
